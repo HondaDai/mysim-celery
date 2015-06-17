@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import socket
 from celery import Celery
 
 
@@ -10,7 +11,11 @@ from celery import Celery
 CELERY_ACKS_LATE = True
 CELERYD_PREFETCH_MULTIPLIER = 1
 
-ns_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23"
+if socket.gethostname() == 'HsM.local':
+  ns_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23"
+else:
+  ns_path = "~/ns-allinone-3.23/ns-3.23"
+
 os.chdir(ns_path)
 
 def build_mysim(mysim_param):
