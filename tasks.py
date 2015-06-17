@@ -14,7 +14,7 @@ CELERYD_PREFETCH_MULTIPLIER = 1
 if socket.gethostname() == 'HsM.local':
   ns_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23"
 else:
-  ns_path = "~/ns-allinone-3.23/ns-3.23"
+  ns_path = os.getenv("HOME")+"/ns-allinone-3.23/ns-3.23"
 
 os.chdir(ns_path)
 
