@@ -15,6 +15,7 @@ if socket.gethostname() == 'HsM.local':
 else:
   ns_path = os.getenv("HOME")+"/ns-allinone-3.23/ns-3.23"
 
+os.chdir(ns_path)
 
 argc = len(sys.argv)
 
