@@ -9,6 +9,11 @@ import signal
 import time
 import platform
 
+if socket.gethostname() == 'HsM.local':
+  ns_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23"
+else:
+  ns_path = "~/ns-allinone-3.23/ns-3.23"
+
 
 argc = len(sys.argv)
 
@@ -120,7 +125,7 @@ _seeds = [str(i) for i in range(from_idx, to_idx)]
 
 
 
-db_conf_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23/godb.conf"
+db_conf_path = "%s/godb.conf" % (ns_path)
 db_conf = {k.strip(): v.strip() for k, v in [kv.split("=") for kv in open(db_conf_path).read().strip().split("\n")] }
 
 # init go db
