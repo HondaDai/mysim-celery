@@ -8,6 +8,7 @@ from pprint import pprint
 import signal
 import time
 import platform
+import socket
 
 if socket.gethostname() == 'HsM.local':
   ns_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23"
@@ -50,7 +51,6 @@ def cross(origin, keys):
 
 
 def ip():
-  import socket
   return socket.gethostbyname_ex(socket.gethostname())[-1][-1]
 
 def default(l, idx, def_v):
