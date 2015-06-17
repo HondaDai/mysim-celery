@@ -1,0 +1,164 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import re
+import subprocess
+from pprint import pprint
+import signal
+import time
+import platform
+
+
+argc = len(sys.argv)
+
+def say(msg):
+  if platform.system() == 'Darwin':
+    # os.system("say -v Mei-Jia %s" % (msg))
+    os.system("say %s" % (msg))
+
+def alert(msg):
+  if platform.system() == 'Darwin':
+    os.system("osascript -e 'tell app \"System Events\" to display dialog \"%s\"' >/dev/null 2>&1" % (msg) )
+
+def build_mysim(mysim_param):
+  mapper = lambda x: "./waf --run \"scratch/mysim/mysim %s\"" % (x)
+  return map (mapper, mysim_param)
+
+def build_mysim_param(origin_cross, times=1, from_idx=0):
+  result = []
+  for i in xrange(0, times):
+    i = i + from_idx
+    for oc in origin_cross:
+      result.append(" --RngRun=%d --resultPrefix=MYSIM-%d-%s %s" % (i, i, oc, origin_cross[oc]) )
+  return result
+
+def cross(origin, keys):
+  result = {}
+  if origin == {}:
+    return keys
+
+  for o in origin:
+    for k in keys:
+      result.update({"-".join([o,k]) : " ".join([origin[o], keys[k]])})
+  return result
+
+
+def ip():
+  import socket
+  return socket.gethostbyname_ex(socket.gethostname())[-1][-1]
+
+def default(l, idx, def_v):
+  return l[idx] if len(l) > idx else def_v
+
+def wait_process():
+  while (True):
+    completed = []
+    l = len(pros)
+    for i in xrange(l):
+      if pros[i].poll() is not None:
+        completed.append(i)
+
+    for i in xrange(len(completed)-1, -1, -1):
+      # pros[completed[i]].terminate()
+      print(completed[i])
+      del pros[completed[i]]
+
+    if l == len(completed):
+      break
+    else:
+      print("%d of %d is completed" % (len(completed), len(pros)))
+      time.sleep(10)
+
+
+attr = [
+  {"pro":"--enableProxy=true", "srv":"--enableProxy=false"},
+  # {"pro":"--enableProxy=true"},
+  # {"srv":"--enableProxy=false"},
+
+  # {"1c":"--clientSize=1", "5c":"--clientSize=5"},
+  # {"400c":"--clientSize=400"},
+  {"5c":"--clientSize=5"},
+  # {"100c":"--clientSize=100", 
+  #  "200c":"--clientSize=200", 
+  #  "300c":"--clientSize=300", 
+  #  "400c":"--clientSize=400", 
+  #  "500c":"--clientSize=500",} ,
+
+  {"0er":"--errorRate=0", "0.01er":"--errorRate=0.01"},
+  # {"0.01er":"--errorRate=0.01"},
+  # {"0er":"--errorRate=0"},
+
+  {"0d":"--proxyServerDelay=0ms", "100d":"--proxyServerDelay=100ms"},
+  # {"100d":"--proxyServerDelay=100ms"},
+  # {"0d":"--proxyServerDelay=0ms"},
+
+  # {"10f":"--fileSize=10"},
+  {"10f":"--fileSize=10"},
+
+  {"10l":"--lambdaReciprocal=10"},
+  # {"0l":"--lambdaReciprocal=0"},
+]
+from_idx = 0 # default is 0
+
+
+if argc == 1:
+  print("You should pass 1+ arguments.")
+
+
+
+params = reduce(cross, attr, {})
+
+if sys.argv[1] == "help":
+  to_idx = int(default(sys.argv, 2, 1))
+else:
+  to_idx = int(sys.argv[1])
+
+_dests = list(set([p.split('-')[0] for p in params]))
+_params = list(set(['-'.join(p.split('-')[1:]) for p in params]))
+_seeds = [str(i) for i in range(from_idx, to_idx)]
+
+
+
+db_conf_path = "/Volumes/Transcend/ns-allinone-3.23/ns-3.23/godb.conf"
+db_conf = {k.strip(): v.strip() for k, v in [kv.split("=") for kv in open(db_conf_path).read().strip().split("\n")] }
+
+# init go db
+argv = [
+  "-action", "init",
+  "-schema", db_conf['schema_name'],
+  "-params", ",".join(_params),
+  "-dests", ",".join(_dests),
+  "-seeds", ",".join(_seeds),
+]
+os.system(db_conf['program_path']+"/"+db_conf['program_name']+" "+" ".join(argv))
+
+
+from celery.task.control import discard_all
+discard_all()
+
+import tasks
+
+# params = build_mysim_param(params, to_idx, from_idx)
+# pprint()
+
+
+# jobs = [ tasks.run_simulation.delay(job) for job in range(10)]
+jobs = [ tasks.run_simulation.delay(job) for job in build_mysim_param(params, to_idx, from_idx)]
+
+# jobs = [jobs[0]]
+
+while True:
+  results = [job.result for job in jobs]
+  pprint(results)
+
+  if all(r != None for r in results):
+    break
+  else:
+    time.sleep(10)
+    
+
+
+
+
+
