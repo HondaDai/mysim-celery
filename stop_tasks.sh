@@ -1,0 +1,1 @@
+celery purge -f
