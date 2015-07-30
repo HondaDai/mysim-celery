@@ -150,20 +150,19 @@ import tasks
 # params = build_mysim_param(params, to_idx, from_idx)
 # pprint()
 
-
 # jobs = [ tasks.run_simulation.delay(job) for job in range(10)]
 jobs = [ tasks.run_simulation.delay(job) for job in build_mysim_param(params, to_idx, from_idx)]
 
 # jobs = [jobs[0]]
 
-# while True:
-#   results = [job.result for job in jobs]
-#   pprint(results)
+while True:
+  results = [job.result for job in jobs]
+  pprint(results)
 
-#   if all(r != None for r in results):
-#     break
-#   else:
-#     time.sleep(10)
+  if all(r != None for r in results):
+    break
+  else:
+    time.sleep(10)
     
 
 
