@@ -138,6 +138,7 @@ argv = [
   "-dests", ",".join(_dests),
   "-seeds", ",".join(_seeds),
 ]
+
 os.system(db_conf['program_path']+"/"+db_conf['program_name']+" "+" ".join(argv))
 
 
@@ -155,14 +156,14 @@ jobs = [ tasks.run_simulation.delay(job) for job in build_mysim_param(params, to
 
 # jobs = [jobs[0]]
 
-while True:
-  results = [job.result for job in jobs]
-  pprint(results)
+# while True:
+#   results = [job.result for job in jobs]
+#   pprint(results)
 
-  if all(r != None for r in results):
-    break
-  else:
-    time.sleep(10)
+#   if all(r != None for r in results):
+#     break
+#   else:
+#     time.sleep(10)
     
 
 
