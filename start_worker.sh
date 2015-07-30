@@ -1,4 +1,4 @@
-celery multi start \
+nohup celery \
   -A tasks worker \
   --loglevel=info \
   --concurrency=1 \
