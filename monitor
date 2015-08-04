@@ -79,13 +79,14 @@ def wait_process():
 
 
 attr = [
-  {"pro":"--enableProxy=true", "srv":"--enableProxy=false"},
+  # {"pro":"--enableProxy=true", "srv":"--enableProxy=false"},
   # {"pro":"--enableProxy=true"},
-  # {"srv":"--enableProxy=false"},
+  {"srv":"--enableProxy=false"},
 
   # {"1c":"--clientSize=1", "5c":"--clientSize=5"},
+  {"5c":"--clientSize=5", "10c":"--clientSize=10", "15c":"--clientSize=15"},
   # {"400c":"--clientSize=400"},
-  {"100c":"--clientSize=100"},
+  # {"100c":"--clientSize=100"},
   # {"100c":"--clientSize=100", 
   #  "200c":"--clientSize=200", 
   #  "300c":"--clientSize=300", 
@@ -101,7 +102,7 @@ attr = [
   # {"0d":"--proxyServerDelay=0ms"},
 
   # {"10f":"--fileSize=10"},
-  {"10f":"--fileSize=10"},
+  {"5f":"--fileSize=5"},
 
   {"10l":"--lambdaReciprocal=10"},
   # {"0l":"--lambdaReciprocal=0"},
