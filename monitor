@@ -113,7 +113,7 @@ attr = [
   {"110ccs": "--crowdClientSize=110"},
   {"400cft": "--crowdFromTime=400"},
   {"600ctt": "--crowdToTime=600"},
-  {"2cl": "--crowdLambdaReciprocal=2"}
+  {"4cl": "--crowdLambdaReciprocal=4"}
 ]
 from_idx = 0 # default is 0
 
