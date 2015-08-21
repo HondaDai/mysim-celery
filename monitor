@@ -110,7 +110,7 @@ attr = [
 
   {"4000st":"--stopTime=4000"},
 
-  {"220ccs": "--crowdClientSize=220"},
+  {"110ccs": "--crowdClientSize=110"},
   {"400cft": "--crowdFromTime=400"},
   {"600ctt": "--crowdToTime=600"},
   {"2cl": "--crowdLambdaReciprocal=2"}
