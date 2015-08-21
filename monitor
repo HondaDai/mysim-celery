@@ -85,8 +85,9 @@ attr = [
 
   # {"1c":"--clientSize=1", "5c":"--clientSize=5"},
   # {"5c":"--clientSize=5", "10c":"--clientSize=10", "15c":"--clientSize=15"},
-  {"30c":"--clientSize=30"},
-  # {"100c":"--clientSize=100"},
+  # {"5c":"--clientSize=5"},
+  # {"30c":"--clientSize=30"},
+  {"3c":"--clientSize=3"},
   # {"100c":"--clientSize=100", 
   #  "200c":"--clientSize=200", 
   #  "300c":"--clientSize=300", 
@@ -102,10 +103,17 @@ attr = [
   # {"0d":"--proxyServerDelay=0ms"},
 
   # {"10f":"--fileSize=10"},
-  {"5f":"--fileSize=5"},
+  {"2f":"--fileSize=2"},
 
-  {"10l":"--lambdaReciprocal=10"},
+  {"8l":"--lambdaReciprocal=8"},
   # {"0l":"--lambdaReciprocal=0"},
+
+  {"10st":"--stopTime=10"},
+
+  {"0ccs": "--crowdClientSize=0"},
+  {"50cft": "--crowdFromTime=50"},
+  {"100ctt": "--crowdToTime=100"},
+  {"2cl": "--crowdLambdaReciprocal=2"}
 ]
 from_idx = 0 # default is 0
 
@@ -118,13 +126,13 @@ if argc == 1:
 params = reduce(cross, attr, {})
 
 if sys.argv[1] == "help":
-  to_idx = int(default(sys.argv, 2, 1))
+  ntimes = int(default(sys.argv, 2, 1))
 else:
-  to_idx = int(sys.argv[1])
+  ntimes = int(sys.argv[1])
 
 _dests = list(set([p.split('-')[0] for p in params]))
 _params = list(set(['-'.join(p.split('-')[1:]) for p in params]))
-_seeds = [str(i) for i in range(from_idx, to_idx)]
+_seeds = [str(i) for i in range(from_idx, from_idx+ntimes)]
 
 
 
@@ -143,27 +151,41 @@ argv = [
 os.system(db_conf['program_path']+"/"+db_conf['program_name']+" "+" ".join(argv))
 
 
+
+
+
 from celery.task.control import discard_all
+from celery import group
+
 discard_all()
 
 import tasks
 
-# params = build_mysim_param(params, to_idx, from_idx)
-# pprint()
 
-# jobs = [ tasks.run_simulation.delay(job) for job in range(10)]
-jobs = [ tasks.run_simulation.delay(job) for job in build_mysim_param(params, to_idx, from_idx)]
+jobs = []
+for i in xrange(0, ntimes):
+  i = i + from_idx
+  mysim_param = build_mysim_param(params, 1, i)
+  jobs += [ group( tasks.run_simulation.s(job) for job in mysim_param ).delay() ]
+  pprint(["./waf --run \"scratch/mysim/mysim %s\"" % (x) for x in mysim_param])
+
+
+# mysim_param = build_mysim_param(params, ntimes, from_idx)
+# pprint(["./waf --run \"scratch/mysim/mysim %s\"" % (x) for x in mysim_param])
+# jobs = [ tasks.run_simulation.delay(job) for job in mysim_param]
+
+pprint(jobs)
 
 # jobs = [jobs[0]]
 
-while True:
-  results = [job.result for job in jobs]
-  pprint(results)
+# while True:
+#   results = [job.result for job in jobs]
+#   pprint(results)
 
-  if all(r != None for r in results):
-    break
-  else:
-    time.sleep(10)
+#   if all(r != None for r in results):
+#     break
+#   else:
+#     time.sleep(10)
     
 
 
