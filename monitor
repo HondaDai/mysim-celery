@@ -105,7 +105,7 @@ attr = [
   # {"10f":"--fileSize=10"},
   {"2f":"--fileSize=2"},
 
-  {"12l":"--lambdaReciprocal=12"},
+  {"16l":"--lambdaReciprocal=16"},
   # {"0l":"--lambdaReciprocal=0"},
 
   {"4000st":"--stopTime=4000"},
