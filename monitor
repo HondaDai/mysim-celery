@@ -87,7 +87,7 @@ attr = [
   # {"5c":"--clientSize=5", "10c":"--clientSize=10", "15c":"--clientSize=15"},
   # {"5c":"--clientSize=5"},
   # {"30c":"--clientSize=30"},
-  {"3c":"--clientSize=3"},
+  {"300c":"--clientSize=300"},
   # {"100c":"--clientSize=100", 
   #  "200c":"--clientSize=200", 
   #  "300c":"--clientSize=300", 
@@ -108,12 +108,12 @@ attr = [
   {"8l":"--lambdaReciprocal=8"},
   # {"0l":"--lambdaReciprocal=0"},
 
-  {"10st":"--stopTime=10"},
+  {"2000st":"--stopTime=2000"},
 
   {"0ccs": "--crowdClientSize=0"},
-  {"50cft": "--crowdFromTime=50"},
-  {"100ctt": "--crowdToTime=100"},
-  {"2cl": "--crowdLambdaReciprocal=2"}
+  # {"0cft": "--crowdFromTime=0"},
+  # {"0ctt": "--crowdToTime=0"},
+  # {"0cl": "--crowdLambdaReciprocal=0"}
 ]
 from_idx = 0 # default is 0
 
