@@ -87,7 +87,7 @@ attr = [
   # {"5c":"--clientSize=5", "10c":"--clientSize=10", "15c":"--clientSize=15"},
   # {"5c":"--clientSize=5"},
   # {"30c":"--clientSize=30"},
-  {"500c":"--clientSize=500"},
+  {"350c":"--clientSize=350"},
   # {"100c":"--clientSize=100", 
   #  "200c":"--clientSize=200", 
   #  "300c":"--clientSize=300", 
@@ -105,7 +105,7 @@ attr = [
   # {"10f":"--fileSize=10"},
   {"2f":"--fileSize=2"},
 
-  {"8l":"--lambdaReciprocal=8"},
+  {"12l":"--lambdaReciprocal=12"},
   # {"0l":"--lambdaReciprocal=0"},
 
   {"4000st":"--stopTime=4000"},
