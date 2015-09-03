@@ -87,7 +87,7 @@ attr = [
   # {"5c":"--clientSize=5", "10c":"--clientSize=10", "15c":"--clientSize=15"},
   # {"5c":"--clientSize=5"},
   # {"30c":"--clientSize=30"},
-  {"300c":"--clientSize=300"},
+  {"550c":"--clientSize=550"},
   # {"100c":"--clientSize=100", 
   #  "200c":"--clientSize=200", 
   #  "300c":"--clientSize=300", 
